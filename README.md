@@ -1,6 +1,6 @@
 
 
-## fully functional linear regression model with basic functions to test results 
+## Fully functional linear regression model developed in Python 
 
 ### Project Overview 
 * Implements linear regression from scratch in Python using NumPy
