@@ -112,7 +112,32 @@ def sample_data(sample_size = 1000, random_state = 42):
 
     return X, y.ravel()
 
-#def split_data(X, y, test_size=0.2, random_state=42):
+def split_data(X, y, test_size=0.2, random_state=42):
+    """
+    Splits data into training and testing sets.
+    Make sure to always split the data before fitting the model
+    parameters:
+        -param X: Features
+        -param y: Target variable
+        -param test_size: Proportion of data to be used as test set
+        -param random_state: Seed for random number generator for reproducibility
+    
+    return: X_train, X_test, y_train, y_test
+    """
+    rng = np.random.default_rng(random_state)
+    no_samples = X.shape[0]
+    indices = np.arange(no_samples)
+    rng.shuffle(indices)
+
+    split_index = int(no_samples * test_size)
+    test_index = indices[:split_index]
+    train_index = indices[split_index:]
+
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+
+    return X_train, X_test, y_train, y_test
+
 
 #def visualise_data()
     
