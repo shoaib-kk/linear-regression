@@ -90,14 +90,14 @@ class LinearRegression:
         
         return X.dot(coefficients)
     
-def sample_data(sample_size = 1000, random_state = 42):
+def sample_data(sample_size = 1000, random_state = 42, std_dev = 1.0):
 
     rng = np.random.default_rng(random_state)
 
     X = rng.uniform(0, 10, size=(sample_size, 1))
 
     # noise makes it more realistic for testing gradient descent
-    noise = rng.normal(0, 1, size=(sample_size, 1))
+    noise = rng.normal(0, std_dev, size=(sample_size, 1))
 
     y = 3 * X + 7 + noise
 
@@ -130,16 +130,36 @@ def split_data(X, y, test_size=0.2, random_state=42):
     return X_train, X_test, y_train, y_test
 
 
-def visualise_data(X, y, overlay_regression=False, model = None):
-    plt.scatter(X, y, color='red', label='Data points')
-    plt.xlabel('X')
-    plt.ylabel('y')
-    plt.title('Scatter plot of data')
-    plt.legend()
+def visualise_data(X, y, overlay_regression=False, model=None):
+    figure, axes = plt.subplots()
+
+    axes.scatter(X, y, color='red', label='Data points')
+    axes.set_xlabel('X')
+    axes.set_ylabel('y')
+    axes.set_title('Scatter plot of data')
+    axes.text(0, 1.05, "Press any key to close the figure", fontsize=8, verticalalignment='bottom')
     if overlay_regression:
-        plt.plot(X, model.predict(X), color='black', label='Regression line')
+        axes.plot(X, model.predict(X), color='black', label='Regression line')
+
+    axes.legend()
+
+    # Close figure when a key is pressed
+    def on_key(event):
+        plt.close(event.canvas.figure)
+
+    figure.canvas.mpl_connect("key_press_event", on_key)
+
     plt.show()
     
 #def visualise_loss()
+
+def calculate_r2_score(y_true, y_pred):
+    # R² = 1 - (SS_residual / SS_total)
+    # Represents how much of the total variance in the target variable is explained by the model
+
+    ss_total = np.sum((y_true - np.mean(y_true)) ** 2)
+    ss_residual = np.sum((y_true - y_pred) ** 2)
+    r2_score = 1 - (ss_residual / ss_total)
+    return r2_score
 
  
